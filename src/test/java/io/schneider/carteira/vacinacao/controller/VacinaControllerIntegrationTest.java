@@ -1,7 +1,7 @@
 package io.schneider.carteira.vacinacao.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
+import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static io.schneider.carteira.vacinacao.fixture.PessoaDTOFixture.parametrosPessoaDTO;
-import static io.schneider.carteira.vacinacao.fixture.PessoaDTOFixture.retornoPessoaDTO;
-import static io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture.pessoaEntityEntrada;
-import static io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture.pessoaEntityRetorno;
+import static io.schneider.carteira.vacinacao.fixture.VacinaDTOFixture.parametrosVacinaDTO;
+import static io.schneider.carteira.vacinacao.fixture.VacinaDTOFixture.retornoVacinaDTO;
+import static io.schneider.carteira.vacinacao.fixture.VacinaEntityFixture.vacinaEntityEntrada;
+import static io.schneider.carteira.vacinacao.fixture.VacinaEntityFixture.vacinaEntityRetorno;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,30 +23,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class PessoaControllerIntegrationTest {
+class VacinaControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private PessoaRepository repository;
+    private VacinaRepository repository;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-
     @Test
     @Sql(scripts = "/reset_sequences.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void deveInserirPessoaQuandoEnviarDadosCorretos() throws Exception {
-        final var parametros = parametrosPessoaDTO().build();
-        final var retornoEsperadoDTO = retornoPessoaDTO().build();
-        final var retornoEsperadoEntity = pessoaEntityRetorno().build();
+    void deveInserirVacinaQuandoEnviarDadosCorretos() throws Exception {
+        final var parametros = parametrosVacinaDTO().build();
+        final var retornoEsperadoDTO = retornoVacinaDTO().build();
+        final var retornoEsperadoEntity = vacinaEntityRetorno().build();
 
-        mockMvc.perform(post("/api/pessoas")
+        mockMvc.perform(post("/api/vacinas")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(parametros)))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/pessoas/1"))
+                .andExpect(header().string("Location", "/api/vacinas/1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(retornoEsperadoDTO)));
 
@@ -58,11 +57,11 @@ class PessoaControllerIntegrationTest {
 
     @Test
     @Sql(scripts = "/reset_sequences.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void deveRetornarPessoaQuandoBuscarPeloId() throws Exception {
-        final var pessoa = repository.save(pessoaEntityEntrada().build());
-        final var retornoEsperado = retornoPessoaDTO().id(pessoa.getId()).build();
+    void deveRetornarVacinaQuandoBuscarPeloId() throws Exception {
+        final var vacina = repository.save(vacinaEntityEntrada().build());
+        final var retornoEsperado = retornoVacinaDTO().id(vacina.getId()).build();
 
-        mockMvc.perform(get("/api/pessoas/" + pessoa.getId())
+        mockMvc.perform(get("/api/vacinas/" + vacina.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

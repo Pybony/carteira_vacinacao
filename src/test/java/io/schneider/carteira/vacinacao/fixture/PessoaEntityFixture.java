@@ -8,22 +8,22 @@ import java.util.Optional;
 
 public interface PessoaEntityFixture {
 
-    static PessoaEntity.PessoaEntityBuilder pessoaEntityEntrada(){
+    static PessoaEntity.PessoaEntityBuilder pessoaEntityEntrada() {
         return PessoaEntity.builder()
                 .nome("João")
                 .dataNascimento(LocalDate.now())
                 .sexo(SexoEnum.MASCULINO);
     }
 
-    static PessoaEntity.PessoaEntityBuilder pessoaEntityRetorno(){
+    static PessoaEntity.PessoaEntityBuilder pessoaEntityRetorno() {
         return pessoaEntityEntrada().id(1L);
     }
 
-    static Optional<PessoaEntity> pessoaEntityOptional(){
+    static Optional<PessoaEntity> pessoaEntityOptional() {
         return Optional.of(pessoaEntityRetorno().build());
     }
 
-    static Optional<PessoaEntity> pessoaEntityOptionalVazia(){
+    static Optional<PessoaEntity> pessoaEntityOptionalVazia() {
         return Optional.empty();
     }
 }

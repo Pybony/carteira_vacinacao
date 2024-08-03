@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.net.URI;
 
 @RestController
@@ -22,7 +21,7 @@ public class PessoaController {
 
     @PostMapping
     @Operation(summary = "Cadastrar nova pessoa", description = "Cadastra uma nova pessoa no sistema")
-    public ResponseEntity<RetornoPessoaDTO> inserir(@RequestBody ParametrosPessoaDTO parametrosPessoa){
+    public ResponseEntity<RetornoPessoaDTO> inserir(@RequestBody final ParametrosPessoaDTO parametrosPessoa){
         final var pessoa = service.salvar(parametrosPessoa);
         final var uri = URI.create("/api/pessoas/" + pessoa.id());
         return ResponseEntity.created(uri).body(pessoa);
@@ -30,7 +29,7 @@ public class PessoaController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar pessoa pelo id", description = "Busca uma pessoa no sistema pelo id")
-    public ResponseEntity<RetornoPessoaDTO> buscarPeloId(@PathVariable Long id){
+    public ResponseEntity<RetornoPessoaDTO> buscarPeloId(@PathVariable final Long id){
         final var pessoa = service.consultarPorId(id);
         return ResponseEntity.ok(pessoa);
     }

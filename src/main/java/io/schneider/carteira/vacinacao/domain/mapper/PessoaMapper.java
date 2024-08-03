@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PessoaMapper {
 
-    PessoaEntity paraEntity(ParametrosPessoaDTO pessoaDTO);
+    PessoaEntity paraEntity(final ParametrosPessoaDTO pessoaDTO);
 
-    RetornoPessoaDTO paraDTO(PessoaEntity pessoa);
+    RetornoPessoaDTO paraDTO(final PessoaEntity pessoa);
 }

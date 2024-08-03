@@ -15,16 +15,17 @@ public class PessoaService {
     private final PessoaRepository repository;
     private final PessoaMapper mapper;
 
-    public RetornoPessoaDTO salvar(ParametrosPessoaDTO dto) {
+    public RetornoPessoaDTO salvar(final ParametrosPessoaDTO dto) {
         final var pessoa = mapper.paraEntity(dto);
         final var novaPessoa = repository.save(pessoa);
         return mapper.paraDTO(novaPessoa);
     }
 
-    public RetornoPessoaDTO consultarPorId(Long id) {
+    public RetornoPessoaDTO consultarPorId(final Long id) {
         final var pessoa = repository.findById(id);
-        if(pessoa.isPresent())
+        if (pessoa.isPresent())
             return mapper.paraDTO(pessoa.get());
         throw new NaoEncontradoExcepiton("Pessoa não encontrada");
     }
+
 }

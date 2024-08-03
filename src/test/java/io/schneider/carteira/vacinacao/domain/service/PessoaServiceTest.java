@@ -5,9 +5,6 @@ import io.schneider.carteira.vacinacao.controller.dto.RetornoPessoaDTO;
 import io.schneider.carteira.vacinacao.domain.entity.PessoaEntity;
 import io.schneider.carteira.vacinacao.domain.mapper.PessoaMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
-import io.schneider.carteira.vacinacao.fixture.PessoaDTOFixture;
-import io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture;
-import io.schneider.carteira.vacinacao.shared.model.SexoEnum;
 import io.schneider.carteira.vacinacao.shared.model.exception.NaoEncontradoExcepiton;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,11 +13,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static io.schneider.carteira.vacinacao.fixture.PessoaDTOFixture.parametrosPessoaDTO;
 import static io.schneider.carteira.vacinacao.fixture.PessoaDTOFixture.retornoPessoaDTO;
 import static io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture.*;
+import static io.schneider.carteira.vacinacao.shared.model.SexoEnum.MASCULINO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,7 +49,7 @@ class PessoaServiceTest {
                 .thenReturn(pessoaEntityRetorno);
 
         when(mapper.paraDTO(pessoaEntityRetorno))
-                .thenReturn(new RetornoPessoaDTO(1L, "João", LocalDate.now(), SexoEnum.MASCULINO));
+                .thenReturn(new RetornoPessoaDTO(1L, "João", LocalDate.now(), MASCULINO));
 
         assertThat(service.salvar(parametros)).usingRecursiveComparison().isEqualTo(retornoEsperado);
         verify(mapper, times(1)).paraEntity(any(ParametrosPessoaDTO.class));
@@ -70,10 +67,11 @@ class PessoaServiceTest {
                 .thenReturn(optionalPessoa);
 
         when(mapper.paraDTO(optionalPessoa.get()))
-                .thenReturn(new RetornoPessoaDTO(1L, "João", LocalDate.now(), SexoEnum.MASCULINO));
+                .thenReturn(new RetornoPessoaDTO(1L, "João", LocalDate.now(), MASCULINO));
 
         assertThat(service.consultarPorId(id)).usingRecursiveComparison().isEqualTo(retornoEsperado);
         verify(repository, times(1)).findById(id);
+        verify(mapper, times(1)).paraDTO(any(PessoaEntity.class));
     }
 
     @Test
@@ -90,4 +88,5 @@ class PessoaServiceTest {
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, never()).paraDTO(any(PessoaEntity.class));
     }
+
 }

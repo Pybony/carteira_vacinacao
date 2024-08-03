@@ -22,4 +22,5 @@ public interface PessoaDTOFixture {
                 .dataNascimento(LocalDate.now())
                 .sexo(SexoEnum.MASCULINO);
     }
+
 }
