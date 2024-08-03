@@ -1,20 +1,25 @@
 package io.schneider.carteira.vacinacao.domain.service;
 
 import io.schneider.carteira.vacinacao.controller.dto.ParametrosRegistroVacinacaoDTO;
+import io.schneider.carteira.vacinacao.controller.dto.RetornoCarteiraVacinacaoDTO;
 import io.schneider.carteira.vacinacao.controller.dto.RetornoRegistroVacinacaoDTO;
+import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
 import io.schneider.carteira.vacinacao.domain.mapper.RegistroVacinacaoMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
-import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
 import io.schneider.carteira.vacinacao.domain.repository.RegistroVacinacaoRepository;
+import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
 import io.schneider.carteira.vacinacao.shared.model.exception.NaoEncontradoExcepiton;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RegistroVacinacaoService {
 
-    private final RegistroVacinacaoRepository repository;
+    private final RegistroVacinacaoRepository registroVacinacaoRepository;
 
     private final PessoaRepository pessoaRepository;
 
@@ -31,7 +36,7 @@ public class RegistroVacinacaoService {
         final var vacina = vacinaRepository.findById(registroVacinacao.getVacina().getId())
                 .orElseThrow(() -> new NaoEncontradoExcepiton("Vacina não encontrada"));
 
-        final var novoRegistroVacinacao = repository.save(registroVacinacao);
+        final var novoRegistroVacinacao = registroVacinacaoRepository.save(registroVacinacao);
 
         final var vacinaCompleta = novoRegistroVacinacao.toBuilder()
                 .pessoa(pessoa)
@@ -42,7 +47,7 @@ public class RegistroVacinacaoService {
     }
 
     public RetornoRegistroVacinacaoDTO consultarPorId(final Long id) {
-        final var registroVacinacao = repository.findById(id)
+        final var registroVacinacao = registroVacinacaoRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoExcepiton("Registro de vacinação não encontrada"));
 
         final var pessoa = pessoaRepository.findById(registroVacinacao.getPessoa().getId())
@@ -57,6 +62,25 @@ public class RegistroVacinacaoService {
                 .build();
 
         return mapper.paraDTO(registroVacinacaoCompleto);
+    }
+
+    public RetornoCarteiraVacinacaoDTO consultarCarteiraVacinacao(Long id) {
+        final var pessoa = pessoaRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoExcepiton("Pessoa não encontrada"));
+
+        final var registrosVacinacoes = registroVacinacaoRepository.findByPessoaId(id);
+        final var vacinas = buscarVacinas(registrosVacinacoes);
+
+        return mapper.paraCarteiraVacinacao(pessoa, vacinas);
+    }
+
+    private List<RegistroVacinacaoEntity> buscarVacinas(Collection<RegistroVacinacaoEntity> registros) {
+        return registros.stream()
+                .map(registrovacinacao -> registrovacinacao.toBuilder()
+                        .vacina(vacinaRepository.findById(registrovacinacao.getVacina().getId())
+                                .orElseThrow(() -> new NaoEncontradoExcepiton("Vacina não encontrada")))
+                        .build())
+                .toList();
     }
 
 }
