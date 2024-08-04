@@ -4,9 +4,12 @@ import io.schneider.carteira.vacinacao.controller.dto.ParametrosPessoaDTO;
 import io.schneider.carteira.vacinacao.controller.dto.RetornoPessoaDTO;
 import io.schneider.carteira.vacinacao.domain.mapper.PessoaMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
+import io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao;
 import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.PESSOA_NAO_ENCONTRADA;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +28,7 @@ public class PessoaService {
         final var pessoa = repository.findById(id);
         if (pessoa.isPresent())
             return mapper.paraDTO(pessoa.get());
-        throw new AplicativoException("Pessoa não encontrada");
+        throw new AplicativoException(PESSOA_NAO_ENCONTRADA.getMessage());
     }
 
 }

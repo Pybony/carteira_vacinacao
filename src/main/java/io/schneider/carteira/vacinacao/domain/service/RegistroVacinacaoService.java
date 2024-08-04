@@ -1,6 +1,8 @@
 package io.schneider.carteira.vacinacao.domain.service;
 
-import io.schneider.carteira.vacinacao.controller.dto.*;
+import io.schneider.carteira.vacinacao.controller.dto.ParametrosRegistroVacinacaoDTO;
+import io.schneider.carteira.vacinacao.controller.dto.RetornoCarteiraVacinacaoDTO;
+import io.schneider.carteira.vacinacao.controller.dto.RetornoRegistroVacinacaoDTO;
 import io.schneider.carteira.vacinacao.domain.converter.CarteiraVacinacaoConverter;
 import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
 import io.schneider.carteira.vacinacao.domain.factory.ValidacaoAplicacaoFactory;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +39,10 @@ public class RegistroVacinacaoService {
         final var registroVacinacao = mapper.paraEntity(dto);
 
         final var pessoa = pessoaRepository.findById(registroVacinacao.getPessoa().getId())
-                .orElseThrow(() -> new AplicativoException("Pessoa não encontrada"));
+                .orElseThrow(() -> new AplicativoException(PESSOA_NAO_ENCONTRADA.getMessage()));
 
         final var vacina = vacinaRepository.findById(registroVacinacao.getVacina().getId())
-                .orElseThrow(() -> new AplicativoException("Vacina não encontrada"));
+                .orElseThrow(() -> new AplicativoException(VACINA_NAO_ENCONTRADA.getMessage()));
 
         final var strategy = validacaoFactory.getStrategy(vacina.getEsquemaVacinacao());
 
@@ -58,13 +62,13 @@ public class RegistroVacinacaoService {
 
     public RetornoRegistroVacinacaoDTO consultarPorId(final Long id) {
         final var registroVacinacao = registroVacinacaoRepository.findById(id)
-                .orElseThrow(() -> new AplicativoException("Registro de vacinação não encontrada"));
+                .orElseThrow(() -> new AplicativoException(REGISTRO_VACINACAO_NAO_ENCONTRADO.getMessage()));
 
         final var pessoa = pessoaRepository.findById(registroVacinacao.getPessoa().getId())
-                .orElseThrow(() -> new AplicativoException("Pessoa não encontrada"));
+                .orElseThrow(() -> new AplicativoException(PESSOA_NAO_ENCONTRADA.getMessage()));
 
         final var vacina = vacinaRepository.findById(registroVacinacao.getVacina().getId())
-                .orElseThrow(() -> new AplicativoException("Vacina não encontrada"));
+                .orElseThrow(() -> new AplicativoException(VACINA_NAO_ENCONTRADA.getMessage()));
 
         final var registroVacinacaoCompleto = registroVacinacao.toBuilder()
                 .pessoa(pessoa)
@@ -76,7 +80,7 @@ public class RegistroVacinacaoService {
 
     public RetornoCarteiraVacinacaoDTO consultarCarteiraVacinacao(Long id) {
         final var pessoa = pessoaRepository.findById(id)
-                .orElseThrow(() -> new AplicativoException("Pessoa não encontrada"));
+                .orElseThrow(() -> new AplicativoException(PESSOA_NAO_ENCONTRADA.getMessage()));
 
         final var registrosVacinacoes = registroVacinacaoRepository.findByPessoaId(id);
         final var vacinas = buscarVacinas(registrosVacinacoes);
@@ -88,7 +92,7 @@ public class RegistroVacinacaoService {
         return registros.stream()
                 .map(registrovacinacao -> registrovacinacao.toBuilder()
                         .vacina(vacinaRepository.findById(registrovacinacao.getVacina().getId())
-                                .orElseThrow(() -> new AplicativoException("Vacina não encontrada")))
+                                .orElseThrow(() -> new AplicativoException(VACINA_NAO_ENCONTRADA.getMessage())))
                         .build())
                 .toList();
     }

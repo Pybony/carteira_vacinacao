@@ -8,6 +8,8 @@ import java.util.List;
 
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.PRIMEIRO_REFORCO;
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.SEGUNDO_REFORCO;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_APLICADAS;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_PERMITIDAS;
 
 @Slf4j
 public class ValidacaoReforcoContinuoStrategy extends AbstractValidacaoAplicacaoStrategy {
@@ -19,7 +21,7 @@ public class ValidacaoReforcoContinuoStrategy extends AbstractValidacaoAplicacao
         log.debug("Dose aplicada: {}", doseAplicada);
 
         if (doseAplicada == PRIMEIRO_REFORCO || doseAplicada == SEGUNDO_REFORCO)
-            throw new NegocioException("Esta dose não é permitida para este tipo de vacina");
+            throw new NegocioException(DOSES_PERMITIDAS.getMessage());
     }
 
     @Override
@@ -29,7 +31,7 @@ public class ValidacaoReforcoContinuoStrategy extends AbstractValidacaoAplicacao
         log.debug("Doses aplicadas: {}", dosesAplicadas);
 
         if (dosesAplicadas < 1)
-            throw new NegocioException("Reforço não pode ser aplicado sem a primeira dose");
+            throw new NegocioException(DOSES_APLICADAS.getMessage());
     }
 
 }

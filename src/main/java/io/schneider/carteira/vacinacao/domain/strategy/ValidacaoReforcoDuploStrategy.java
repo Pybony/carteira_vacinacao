@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.REFORCO_CONTINUO;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_APLICADAS;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_PERMITIDAS;
 
 @Slf4j
 public class ValidacaoReforcoDuploStrategy extends AbstractValidacaoAplicacaoStrategy {
@@ -18,7 +20,7 @@ public class ValidacaoReforcoDuploStrategy extends AbstractValidacaoAplicacaoStr
         log.debug("Dose aplicada: {}", doseAplicada);
 
         if (doseAplicada == REFORCO_CONTINUO)
-            throw new NegocioException("Esta dose não é permitida para este tipo de vacina");
+            throw new NegocioException(DOSES_PERMITIDAS.getMessage());
     }
 
     @Override
@@ -28,7 +30,7 @@ public class ValidacaoReforcoDuploStrategy extends AbstractValidacaoAplicacaoStr
         log.debug("Doses aplicadas: {}", dosesAplicadas);
 
         if (dosesAplicadas >= 5)
-            throw new NegocioException("Todas as doses desta vacina já foram aplicadas");
+            throw new NegocioException(DOSES_APLICADAS.getMessage());
     }
 
 }

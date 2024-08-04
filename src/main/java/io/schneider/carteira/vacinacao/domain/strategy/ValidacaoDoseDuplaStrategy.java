@@ -8,6 +8,8 @@ import java.util.List;
 
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.PRIMEIRA_DOSE;
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.SEGUNDA_DOSE;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_APLICADAS;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_PERMITIDAS;
 
 @Slf4j
 public class ValidacaoDoseDuplaStrategy extends AbstractValidacaoAplicacaoStrategy {
@@ -20,7 +22,7 @@ public class ValidacaoDoseDuplaStrategy extends AbstractValidacaoAplicacaoStrate
         log.debug("Dose aplicada: {}", doseAplicada);
 
         if (doseAplicada != PRIMEIRA_DOSE && doseAplicada != SEGUNDA_DOSE) {
-            throw new NegocioException("Esta dose não é permitida para este tipo de vacina");
+            throw new NegocioException(DOSES_PERMITIDAS.getMessage());
         }
     }
 
@@ -31,7 +33,7 @@ public class ValidacaoDoseDuplaStrategy extends AbstractValidacaoAplicacaoStrate
         log.debug("Doses aplicadas: {}", dosesAplicadas);
 
         if (dosesAplicadas >= 2)
-            throw new NegocioException("Todas as doses desta vacina já foram aplicadas");
+            throw new NegocioException(DOSES_APLICADAS.getMessage());
     }
 
 }

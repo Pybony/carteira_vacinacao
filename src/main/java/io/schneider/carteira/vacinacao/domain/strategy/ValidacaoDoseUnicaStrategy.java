@@ -1,12 +1,15 @@
 package io.schneider.carteira.vacinacao.domain.strategy;
 
 import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
+import io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao;
 import io.schneider.carteira.vacinacao.shared.model.exception.NegocioException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.PRIMEIRA_DOSE;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_APLICADAS;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_PERMITIDAS;
 
 @Slf4j
 public class ValidacaoDoseUnicaStrategy extends AbstractValidacaoAplicacaoStrategy {
@@ -18,7 +21,7 @@ public class ValidacaoDoseUnicaStrategy extends AbstractValidacaoAplicacaoStrate
         log.debug("Dose aplicada: {}", doseAplicada);
 
         if (doseAplicada != PRIMEIRA_DOSE)
-            throw new NegocioException("Esta dose não é permitida para este tipo de vacina");
+            throw new NegocioException(DOSES_PERMITIDAS.getMessage());
     }
 
     @Override
@@ -28,7 +31,7 @@ public class ValidacaoDoseUnicaStrategy extends AbstractValidacaoAplicacaoStrate
         log.debug("Doses aplicadas: {}", dosesAplicadas);
 
         if (dosesAplicadas >= 1)
-            throw new NegocioException("Todas as doses desta vacina já foram aplicadas");
+            throw new NegocioException(DOSES_APLICADAS.getMessage());
     }
 
 }

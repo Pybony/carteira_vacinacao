@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 import static io.schneider.carteira.vacinacao.shared.model.DoseEnum.*;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_APLICADAS;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.DOSES_PERMITIDAS;
 
 @Slf4j
 public class ValidacaoDoseTriplaStrategy extends AbstractValidacaoAplicacaoStrategy {
@@ -20,7 +22,7 @@ public class ValidacaoDoseTriplaStrategy extends AbstractValidacaoAplicacaoStrat
 
         if (doseAplicada != PRIMEIRA_DOSE && doseAplicada != SEGUNDA_DOSE
                 && doseAplicada != TERCEIRA_DOSE)
-            throw new NegocioException("Esta dose não é permitida para este tipo de vacina");
+            throw new NegocioException(DOSES_PERMITIDAS.getMessage());
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ValidacaoDoseTriplaStrategy extends AbstractValidacaoAplicacaoStrat
         log.debug("Doses aplicadas: {}", dosesAplicadas);
 
         if (dosesAplicadas >= 3) {
-            throw new NegocioException("Todas as doses desta vacina já foram aplicadas");
+            throw new NegocioException(DOSES_APLICADAS.getMessage());
         }
     }
 

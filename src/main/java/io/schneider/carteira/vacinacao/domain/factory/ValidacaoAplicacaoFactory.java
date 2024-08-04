@@ -2,6 +2,7 @@ package io.schneider.carteira.vacinacao.domain.factory;
 
 import io.schneider.carteira.vacinacao.domain.strategy.*;
 import io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum;
+import io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao;
 import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import static io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum.*;
+import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao.ESTRATEGIA_VACINACAO_NAO_ENCONTRADA;
 
 @Component
 public class ValidacaoAplicacaoFactory {
@@ -29,7 +31,7 @@ public class ValidacaoAplicacaoFactory {
         ValidacaoAplicacaoStrategy strategy = this.strategies.get(esquema);
 
         if (strategy == null)
-            throw new AplicativoException("Nenhuma estratégia de validação encontrada para o esquema de vacinação: " + esquema);
+            throw new AplicativoException(ESTRATEGIA_VACINACAO_NAO_ENCONTRADA.getMessage(esquema));
 
         return strategy;
     }
