@@ -46,4 +46,11 @@ public class PessoaController {
         return ResponseEntity.ok(pessoa);
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir pessoa pelo id", description = "Exclui uma pessoa e todas as suas vacinações do sistema")
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
+        pessoaService.deletarPessoaComVacinas(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

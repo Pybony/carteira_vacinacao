@@ -22,13 +22,15 @@ public class VacinaService {
     public RetornoVacinaDTO salvar(final ParametrosVacinaDTO dto) {
         final var vacina = mapper.paraEntity(dto);
         final var novaVacina = repository.save(vacina);
+
         return mapper.paraDTO(novaVacina);
     }
 
     public RetornoVacinaDTO consultarPorId(final Long id) {
-        final var vacina = repository.findById(id);
-        if (vacina.isPresent())
-            return mapper.paraDTO(vacina.get());
-        throw new AplicativoException(VACINA_NAO_ENCONTRADA.getMessage());
+        final var vacina = repository.findById(id)
+                .orElseThrow(() -> new AplicativoException(VACINA_NAO_ENCONTRADA.getMessage()));
+
+        return mapper.paraDTO(vacina);
     }
+
 }
