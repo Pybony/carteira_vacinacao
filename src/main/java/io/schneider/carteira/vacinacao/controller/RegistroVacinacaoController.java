@@ -5,6 +5,7 @@ import io.schneider.carteira.vacinacao.controller.dto.RetornoRegistroVacinacaoDT
 import io.schneider.carteira.vacinacao.domain.service.RegistroVacinacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class RegistroVacinacaoController {
 
     @PostMapping
     @Operation(summary = "Cadastrar novo registro de vacinação", description = "Cadastra um novo registro de vacinação no sistema")
-    public ResponseEntity<RetornoRegistroVacinacaoDTO> inserir(@RequestBody final ParametrosRegistroVacinacaoDTO parametrosRegistroVacinacao) {
+    public ResponseEntity<RetornoRegistroVacinacaoDTO> inserir(@Valid @RequestBody final ParametrosRegistroVacinacaoDTO parametrosRegistroVacinacao) {
         final var registroVacinacao = service.salvar(parametrosRegistroVacinacao);
         final var uri = URI.create("/api/registro-vacinacao/" + registroVacinacao.id());
         return ResponseEntity.created(uri).body(registroVacinacao);
