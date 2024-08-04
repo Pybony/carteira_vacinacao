@@ -1,9 +1,10 @@
 package io.schneider.carteira.vacinacao.domain.service;
 
-import io.schneider.carteira.vacinacao.controller.dto.ParametrosRegistroVacinacaoDTO;
-import io.schneider.carteira.vacinacao.controller.dto.RetornoCarteiraVacinacaoDTO;
-import io.schneider.carteira.vacinacao.controller.dto.RetornoRegistroVacinacaoDTO;
+import io.schneider.carteira.vacinacao.controller.dto.*;
+import io.schneider.carteira.vacinacao.domain.converter.CarteiraVacinacaoConverter;
+import io.schneider.carteira.vacinacao.domain.entity.PessoaEntity;
 import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
+import io.schneider.carteira.vacinacao.domain.entity.VacinaEntity;
 import io.schneider.carteira.vacinacao.domain.mapper.RegistroVacinacaoMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
 import io.schneider.carteira.vacinacao.domain.repository.RegistroVacinacaoRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,8 @@ public class RegistroVacinacaoService {
     private final VacinaRepository vacinaRepository;
 
     private final RegistroVacinacaoMapper mapper;
+
+    private final CarteiraVacinacaoConverter converter;
 
     public RetornoRegistroVacinacaoDTO salvar(final ParametrosRegistroVacinacaoDTO dto) {
         final var registroVacinacao = mapper.paraEntity(dto);
@@ -71,7 +75,7 @@ public class RegistroVacinacaoService {
         final var registrosVacinacoes = registroVacinacaoRepository.findByPessoaId(id);
         final var vacinas = buscarVacinas(registrosVacinacoes);
 
-        return mapper.paraCarteiraVacinacao(pessoa, vacinas);
+        return converter.paraCarteiraVacinacaoDTO(pessoa, vacinas);
     }
 
     private List<RegistroVacinacaoEntity> buscarVacinas(Collection<RegistroVacinacaoEntity> registros) {
