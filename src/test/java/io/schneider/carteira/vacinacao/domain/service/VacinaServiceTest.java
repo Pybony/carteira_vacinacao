@@ -1,29 +1,21 @@
 package io.schneider.carteira.vacinacao.domain.service;
 
 import io.schneider.carteira.vacinacao.controller.dto.ParametrosVacinaDTO;
-import io.schneider.carteira.vacinacao.controller.dto.RetornoPessoaDTO;
 import io.schneider.carteira.vacinacao.controller.dto.RetornoVacinaDTO;
-import io.schneider.carteira.vacinacao.domain.entity.PessoaEntity;
 import io.schneider.carteira.vacinacao.domain.entity.VacinaEntity;
 import io.schneider.carteira.vacinacao.domain.mapper.VacinaMapper;
 import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
-import io.schneider.carteira.vacinacao.shared.model.exception.NaoEncontradoExcepiton;
+import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
-
-import static io.schneider.carteira.vacinacao.fixture.PessoaDTOFixture.retornoPessoaDTO;
-import static io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture.pessoaEntityOptional;
-import static io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture.pessoaEntityOptionalVazia;
 import static io.schneider.carteira.vacinacao.fixture.VacinaDTOFixture.parametrosVacinaDTO;
 import static io.schneider.carteira.vacinacao.fixture.VacinaDTOFixture.retornoVacinaDTO;
 import static io.schneider.carteira.vacinacao.fixture.VacinaEntityFixture.*;
 import static io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum.DOSE_UNICA;
-import static io.schneider.carteira.vacinacao.shared.model.SexoEnum.MASCULINO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -89,7 +81,7 @@ class VacinaServiceTest {
                 .thenReturn(optionalVacina);
 
         assertThatThrownBy(() -> service.consultarPorId(id))
-                .isInstanceOf(NaoEncontradoExcepiton.class)
+                .isInstanceOf(AplicativoException.class)
                 .hasMessage("Vacina não encontrada");
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, never()).paraDTO(any(VacinaEntity.class));

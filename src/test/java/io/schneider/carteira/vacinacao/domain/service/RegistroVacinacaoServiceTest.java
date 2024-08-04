@@ -8,7 +8,7 @@ import io.schneider.carteira.vacinacao.domain.mapper.RegistroVacinacaoMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
 import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
 import io.schneider.carteira.vacinacao.domain.repository.RegistroVacinacaoRepository;
-import io.schneider.carteira.vacinacao.shared.model.exception.NaoEncontradoExcepiton;
+import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ class RegistroVacinacaoServiceTest {
     private RegistroVacinacaoService service;
 
     @Test
-    void deveRetornarVacinacaoComSucessoQuandoEnviarTodosDados() {
+    void deveRetornarRegistroVacinacaoComSucessoQuandoEnviarTodosDados() {
         final var parametros = ParametrosRegistroVacinacaoDTO.builder().build();
         final var registroVacinacaoEntityEntrada = registroVacinacaoEntityEntrada().build();
         final var pessoaEntityOptional = pessoaEntityOptional();
@@ -120,7 +120,7 @@ class RegistroVacinacaoServiceTest {
                 .thenReturn(optionalRegistroVacinacao);
 
         assertThatThrownBy(() -> service.consultarPorId(id))
-                .isInstanceOf(NaoEncontradoExcepiton.class)
+                .isInstanceOf(AplicativoException.class)
                 .hasMessage("Registro de vacinação não encontrada");
         verify(registroVacinacaoRepository, times(1)).findById(anyLong());
         verify(pessoaRepository, never()).findById(anyLong());
@@ -145,7 +145,7 @@ class RegistroVacinacaoServiceTest {
                 .thenReturn(optionalPessoa);
 
         assertThatThrownBy(() -> service.consultarPorId(id))
-                .isInstanceOf(NaoEncontradoExcepiton.class)
+                .isInstanceOf(AplicativoException.class)
                 .hasMessage("Pessoa não encontrada");
         verify(registroVacinacaoRepository, times(1)).findById(anyLong());
         verify(pessoaRepository, times(1)).findById(anyLong());
@@ -174,7 +174,7 @@ class RegistroVacinacaoServiceTest {
                 .thenReturn(optionalVacina);
 
         assertThatThrownBy(() -> service.consultarPorId(id))
-                .isInstanceOf(NaoEncontradoExcepiton.class)
+                .isInstanceOf(AplicativoException.class)
                 .hasMessage("Vacina não encontrada");
         verify(registroVacinacaoRepository, times(1)).findById(anyLong());
         verify(pessoaRepository, times(1)).findById(anyLong());

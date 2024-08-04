@@ -4,8 +4,11 @@ import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface RegistroVacinacaoRepository extends JpaRepository<RegistroVacinacaoEntity, Long> {
 
-    Collection<RegistroVacinacaoEntity> findByPessoaId(Long pessoaId);
+    Collection<RegistroVacinacaoEntity> findByPessoaId(final Long pessoaId);
+
+    List<RegistroVacinacaoEntity> findByPessoaIdAndVacinaId(final Long pessoaId, final Long vacinaId);
 }

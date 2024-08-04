@@ -5,7 +5,7 @@ import io.schneider.carteira.vacinacao.controller.dto.RetornoPessoaDTO;
 import io.schneider.carteira.vacinacao.domain.entity.PessoaEntity;
 import io.schneider.carteira.vacinacao.domain.mapper.PessoaMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
-import io.schneider.carteira.vacinacao.shared.model.exception.NaoEncontradoExcepiton;
+import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -83,7 +83,7 @@ class PessoaServiceTest {
                 .thenReturn(optionalPessoa);
 
         assertThatThrownBy(() -> service.consultarPorId(id))
-                .isInstanceOf(NaoEncontradoExcepiton.class)
+                .isInstanceOf(AplicativoException.class)
                 .hasMessage("Pessoa não encontrada");
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, never()).paraDTO(any(PessoaEntity.class));

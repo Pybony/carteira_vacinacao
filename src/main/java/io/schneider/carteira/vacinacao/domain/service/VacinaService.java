@@ -4,7 +4,7 @@ import io.schneider.carteira.vacinacao.controller.dto.ParametrosVacinaDTO;
 import io.schneider.carteira.vacinacao.controller.dto.RetornoVacinaDTO;
 import io.schneider.carteira.vacinacao.domain.mapper.VacinaMapper;
 import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
-import io.schneider.carteira.vacinacao.shared.model.exception.NaoEncontradoExcepiton;
+import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,6 @@ public class VacinaService {
         final var vacina = repository.findById(id);
         if (vacina.isPresent())
             return mapper.paraDTO(vacina.get());
-        throw new NaoEncontradoExcepiton("Vacina não encontrada");
+        throw new AplicativoException("Vacina não encontrada");
     }
 }
