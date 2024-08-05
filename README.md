@@ -67,7 +67,7 @@ git clone https://github.com/Pybony/carteira_vacinacao.git
 1.3.Rodar a aplicação
 
 ```
-java -jar target/carteira_vacinacao-0.0.1-SNAPSHOT.jar
+java -jar target/vacinacao-0.0.1-SNAPSHOT.jar
 ```
 
 2.**Popular Banco (Opcional)**
