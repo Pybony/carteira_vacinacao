@@ -14,9 +14,9 @@ public class ValidacaoDoseUnicaStrategy extends AbstractValidacaoAplicacaoStrate
 
     @Override
     protected void validarDosePermitida(RegistroVacinacaoEntity novaAplicacao) {
-        final var doseAplicada = novaAplicacao.getDoseAplicada();
+        log.debug("Nova Aplicacao: {}", novaAplicacao);
 
-        log.debug("Dose aplicada: {}", doseAplicada);
+        final var doseAplicada = novaAplicacao.getDoseAplicada();
 
         if (doseAplicada != PRIMEIRA_DOSE)
             throw new NegocioException(DOSES_PERMITIDAS.getMessage());
@@ -24,6 +24,8 @@ public class ValidacaoDoseUnicaStrategy extends AbstractValidacaoAplicacaoStrate
 
     @Override
     protected void validarDosesAplicadas(List<RegistroVacinacaoEntity> registrosAnteriores, RegistroVacinacaoEntity novaAplicacao) {
+        log.debug("Aplicações anteriores: {}", registrosAnteriores);
+
         validarAplicacaoMesmaDose(novaAplicacao, registrosAnteriores);
     }
 

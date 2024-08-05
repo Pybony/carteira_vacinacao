@@ -12,6 +12,7 @@ import io.schneider.carteira.vacinacao.domain.repository.RegistroVacinacaoReposi
 import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
 import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,6 +22,7 @@ import static io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVaci
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RegistroVacinacaoService {
 
     private final RegistroVacinacaoRepository registroVacinacaoRepository;
@@ -36,6 +38,8 @@ public class RegistroVacinacaoService {
     private final ValidacaoAplicacaoFactory validacaoFactory;
 
     public RetornoRegistroVacinacaoDTO salvar(final ParametrosRegistroVacinacaoDTO dto) {
+        log.debug("Cadastrando registro de vacinação: {}", dto);
+
         final var registroVacinacao = mapper.paraEntity(dto);
 
         final var pessoa = pessoaRepository.findById(registroVacinacao.getPessoa().getId())
@@ -57,10 +61,15 @@ public class RegistroVacinacaoService {
                 .vacina(vacina)
                 .build();
 
+
+        log.debug("Registro de vacinação cadastrado: {}", vacinaCompleta);
+
         return mapper.paraDTO(vacinaCompleta);
     }
 
     public RetornoRegistroVacinacaoDTO consultarPorId(final Long id) {
+        log.debug("Consultar registro de vacinação: {}", id);
+
         final var registroVacinacao = registroVacinacaoRepository.findById(id)
                 .orElseThrow(() -> new AplicativoException(REGISTRO_VACINACAO_NAO_ENCONTRADO.getMessage()));
 
@@ -75,17 +84,26 @@ public class RegistroVacinacaoService {
                 .vacina(vacina)
                 .build();
 
+
+        log.debug("Registro de vacinação encontrado: {}", registroVacinacaoCompleto);
+
         return mapper.paraDTO(registroVacinacaoCompleto);
     }
 
     public RetornoCarteiraVacinacaoDTO consultarCarteiraVacinacao(Long id) {
+        log.debug("Consultar carteira de vacinação da pessoa: {}", id);
+
         final var pessoa = pessoaRepository.findById(id)
                 .orElseThrow(() -> new AplicativoException(PESSOA_NAO_ENCONTRADA.getMessage()));
 
         final var registrosVacinacoes = registroVacinacaoRepository.findByPessoaId(id);
         final var vacinas = buscarVacinas(registrosVacinacoes);
 
-        return converter.paraCarteiraVacinacaoDTO(pessoa, vacinas);
+        final var carteiraVacinacao = converter.paraCarteiraVacinacaoDTO(pessoa, vacinas);
+
+        log.debug("Carteira de vacinação encontrada: {}", carteiraVacinacao);
+
+        return carteiraVacinacao;
     }
 
     private List<RegistroVacinacaoEntity> buscarVacinas(Collection<RegistroVacinacaoEntity> registros) {

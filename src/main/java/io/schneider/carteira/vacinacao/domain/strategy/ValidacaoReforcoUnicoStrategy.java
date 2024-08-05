@@ -17,6 +17,8 @@ public class ValidacaoReforcoUnicoStrategy extends AbstractValidacaoAplicacaoStr
 
     @Override
     protected void validarDosePermitida(RegistroVacinacaoEntity novaAplicacao) {
+        log.debug("Nova Aplicacao: {}", novaAplicacao);
+
         switch (novaAplicacao.getDoseAplicada()) {
             case PRIMEIRA_DOSE:
             case SEGUNDA_DOSE:
@@ -30,6 +32,8 @@ public class ValidacaoReforcoUnicoStrategy extends AbstractValidacaoAplicacaoStr
 
     @Override
     protected void validarDosesAplicadas(List<RegistroVacinacaoEntity> registrosAnteriores, RegistroVacinacaoEntity novaAplicacao) {
+        log.debug("Aplicações anteriores: {}", registrosAnteriores);
+
         validarAplicacaoMesmaDose(novaAplicacao, registrosAnteriores);
 
         Map<DoseEnum, List<DoseEnum>> doseRequisitos = new HashMap<>();
