@@ -19,7 +19,7 @@ public class CarteiraVacinacaoConverter {
 
     private final PessoaMapper pessoaMapper;
 
-    public RetornoCarteiraVacinacaoDTO paraCarteiraVacinacaoDTO(final PessoaEntity pessoa, Collection<RegistroVacinacaoEntity> registros) {
+    public RetornoCarteiraVacinacaoDTO paraCarteiraVacinacaoDTO(final PessoaEntity pessoa, final Collection<RegistroVacinacaoEntity> registros) {
         final var vacinasAplicadas = registros.stream()
                 .collect(Collectors.groupingBy(RegistroVacinacaoEntity::getVacina))
                 .entrySet().stream()
@@ -40,7 +40,7 @@ public class CarteiraVacinacaoConverter {
         return paraVacinaAplicadaDTO(vacina, dosesAplicadasDTO);
     }
 
-    private RetornoDoseAplicadaDTO paraDoseAplicadadaDTO(RegistroVacinacaoEntity registro) {
+    private RetornoDoseAplicadaDTO paraDoseAplicadadaDTO(final RegistroVacinacaoEntity registro) {
         return RetornoDoseAplicadaDTO.builder()
                 .id(registro.getId())
                 .dataAplicacao(registro.getDataAplicacao())

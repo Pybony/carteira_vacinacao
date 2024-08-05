@@ -1,8 +1,8 @@
 package io.schneider.carteira.vacinacao.fixture;
 
 import io.schneider.carteira.vacinacao.domain.entity.PessoaEntity;
-import io.schneider.carteira.vacinacao.domain.entity.VacinaEntity;
 import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
+import io.schneider.carteira.vacinacao.domain.entity.VacinaEntity;
 
 import java.time.LocalDate;
 import java.util.Optional;

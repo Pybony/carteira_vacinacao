@@ -4,10 +4,13 @@ import io.schneider.carteira.vacinacao.controller.dto.ParametrosRegistroVacinaca
 import io.schneider.carteira.vacinacao.domain.entity.PessoaEntity;
 import io.schneider.carteira.vacinacao.domain.entity.RegistroVacinacaoEntity;
 import io.schneider.carteira.vacinacao.domain.entity.VacinaEntity;
+import io.schneider.carteira.vacinacao.domain.factory.ValidacaoAplicacaoFactory;
 import io.schneider.carteira.vacinacao.domain.mapper.RegistroVacinacaoMapper;
 import io.schneider.carteira.vacinacao.domain.repository.PessoaRepository;
-import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
 import io.schneider.carteira.vacinacao.domain.repository.RegistroVacinacaoRepository;
+import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
+import io.schneider.carteira.vacinacao.domain.strategy.ValidacaoDoseUnicaStrategy;
+import io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum;
 import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,9 +21,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static io.schneider.carteira.vacinacao.fixture.PessoaEntityFixture.*;
-import static io.schneider.carteira.vacinacao.fixture.VacinaEntityFixture.*;
+import static io.schneider.carteira.vacinacao.fixture.RegistroVacinacaoDTOFixture.parametrosRegistroVacinacaoDTO;
 import static io.schneider.carteira.vacinacao.fixture.RegistroVacinacaoDTOFixture.retornoRegistroVacinacaoDTO;
 import static io.schneider.carteira.vacinacao.fixture.RegistroVacinacaoEntityFixture.*;
+import static io.schneider.carteira.vacinacao.fixture.VacinaEntityFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,12 +46,15 @@ class RegistroVacinacaoServiceTest {
     @Mock
     private RegistroVacinacaoMapper mapper;
 
+    @Mock
+    private ValidacaoAplicacaoFactory factory;
+
     @InjectMocks
     private RegistroVacinacaoService service;
 
     @Test
     void deveRetornarRegistroVacinacaoComSucessoQuandoEnviarTodosDados() {
-        final var parametros = ParametrosRegistroVacinacaoDTO.builder().build();
+        final var parametros = parametrosRegistroVacinacaoDTO().build();
         final var registroVacinacaoEntityEntrada = registroVacinacaoEntityEntrada().build();
         final var pessoaEntityOptional = pessoaEntityOptional();
         final var vacinaEntityOptional = vacinaEntityOptional();
@@ -60,14 +67,17 @@ class RegistroVacinacaoServiceTest {
         when(mapper.paraEntity(parametros))
                 .thenReturn(registroVacinacaoEntityEntrada);
 
-        when(registroVacinacaoRepository.save(registroVacinacaoEntityEntrada))
-                .thenReturn(registroVacinacaoEntityRetorno);
-
         when(pessoaRepository.findById(registroVacinacaoEntityEntrada.getPessoa().getId()))
                 .thenReturn(pessoaEntityOptional);
 
         when(vacinaRepository.findById(registroVacinacaoEntityEntrada.getVacina().getId()))
                 .thenReturn(vacinaEntityOptional);
+
+        when(registroVacinacaoRepository.save(registroVacinacaoEntityEntrada))
+                .thenReturn(registroVacinacaoEntityRetorno);
+
+        when(factory.getStrategy(registroVacinacaoEntityRetorno.getVacina().getEsquemaVacinacao()))
+                .thenReturn(new ValidacaoDoseUnicaStrategy());
 
         when(mapper.paraDTO(registroVacinacaoEntityRetorno))
                 .thenReturn(retornoRegistroVacinacaoDTO().build());
@@ -78,6 +88,7 @@ class RegistroVacinacaoServiceTest {
         verify(pessoaRepository, times(1)).findById(anyLong());
         verify(vacinaRepository, times(1)).findById(anyLong());
         verify(mapper, times(1)).paraDTO(any(RegistroVacinacaoEntity.class));
+        verify(factory, times(1)).getStrategy(any(EsquemaVacinacaoEnum.class));
     }
 
     @Test
@@ -121,7 +132,7 @@ class RegistroVacinacaoServiceTest {
 
         assertThatThrownBy(() -> service.consultarPorId(id))
                 .isInstanceOf(AplicativoException.class)
-                .hasMessage("Registro de vacinação não encontrada");
+                .hasMessage("Registro de vacinação não encontrado");
         verify(registroVacinacaoRepository, times(1)).findById(anyLong());
         verify(pessoaRepository, never()).findById(anyLong());
         verify(vacinaRepository, never()).findById(anyLong());

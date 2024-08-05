@@ -11,4 +11,5 @@ public interface VacinaMapper {
     VacinaEntity paraEntity(final ParametrosVacinaDTO dto);
 
     RetornoVacinaDTO paraDTO(final VacinaEntity entity);
+
 }

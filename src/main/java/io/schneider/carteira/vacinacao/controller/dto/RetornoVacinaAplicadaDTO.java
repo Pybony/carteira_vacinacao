@@ -6,5 +6,6 @@ import lombok.Builder;
 import java.util.Collection;
 
 @Builder
-public record RetornoVacinaAplicadaDTO(Long id, String nome, EsquemaVacinacaoEnum esquemaVacinacao, Collection<RetornoDoseAplicadaDTO> doses) {
+public record RetornoVacinaAplicadaDTO(Long id, String nome, EsquemaVacinacaoEnum esquemaVacinacao,
+                                       Collection<RetornoDoseAplicadaDTO> doses) {
 }

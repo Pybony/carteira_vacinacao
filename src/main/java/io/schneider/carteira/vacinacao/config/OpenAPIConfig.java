@@ -16,4 +16,5 @@ public class OpenAPIConfig {
                         .version("1.0.0")
                         .description("Documentação da API de Vacinação"));
     }
+
 }

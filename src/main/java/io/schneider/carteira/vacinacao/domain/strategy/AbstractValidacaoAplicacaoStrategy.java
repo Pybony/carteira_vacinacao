@@ -8,11 +8,11 @@ public non-sealed abstract class AbstractValidacaoAplicacaoStrategy implements V
     @Override
     public void validar(RegistroVacinacaoEntity registro, List<RegistroVacinacaoEntity> registrosAnteriores) {
         validarDosePermitida(registro);
-        validarDosesAplicadas(registrosAnteriores);
+        validarDosesAplicadas(registrosAnteriores, registro);
     }
 
     protected abstract void validarDosePermitida(RegistroVacinacaoEntity registro);
 
-    protected abstract void validarDosesAplicadas(List<RegistroVacinacaoEntity> registrosAnteriores);
+    protected abstract void validarDosesAplicadas(List<RegistroVacinacaoEntity> registrosAnteriores, RegistroVacinacaoEntity novaAplicacao);
 
 }

@@ -2,8 +2,8 @@ package io.schneider.carteira.vacinacao.domain.factory;
 
 import io.schneider.carteira.vacinacao.domain.strategy.*;
 import io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum;
-import io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao;
 import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumMap;
@@ -27,7 +27,7 @@ public class ValidacaoAplicacaoFactory {
         this.strategies.put(REFORCO_CONTINUO, new ValidacaoReforcoContinuoStrategy());
     }
 
-    public ValidacaoAplicacaoStrategy getStrategy(EsquemaVacinacaoEnum esquema) {
+    public ValidacaoAplicacaoStrategy getStrategy(final EsquemaVacinacaoEnum esquema) {
         ValidacaoAplicacaoStrategy strategy = this.strategies.get(esquema);
 
         if (strategy == null)

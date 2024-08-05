@@ -7,6 +7,4 @@ import java.time.LocalDate;
 
 @Builder
 public record RetornoPessoaDTO(Long id, String nome, LocalDate dataNascimento, SexoEnum sexo) {
-
-
 }

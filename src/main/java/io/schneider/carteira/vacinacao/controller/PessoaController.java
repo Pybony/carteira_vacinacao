@@ -26,7 +26,7 @@ public class PessoaController {
 
     @PostMapping
     @Operation(summary = "Cadastrar nova pessoa", description = "Cadastra uma nova pessoa no sistema")
-    public ResponseEntity<RetornoPessoaDTO> inserir(@Valid @RequestBody final ParametrosPessoaDTO parametrosPessoa){
+    public ResponseEntity<RetornoPessoaDTO> inserir(@Valid @RequestBody final ParametrosPessoaDTO parametrosPessoa) {
         final var pessoa = pessoaService.salvar(parametrosPessoa);
         final var uri = URI.create("/api/pessoas/" + pessoa.id());
         return ResponseEntity.created(uri).body(pessoa);
@@ -34,21 +34,21 @@ public class PessoaController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar pessoa pelo id", description = "Busca uma pessoa no sistema pelo id")
-    public ResponseEntity<RetornoPessoaDTO> buscarPeloId(@PathVariable final Long id){
+    public ResponseEntity<RetornoPessoaDTO> buscarPeloId(@PathVariable final Long id) {
         final var pessoa = pessoaService.consultarPorId(id);
         return ResponseEntity.ok(pessoa);
     }
 
     @GetMapping("/{id}/carteira-vacinacao")
     @Operation(summary = "Buscar a carteira de vacinação", description = "Busca carteira de vacinação de uma pessoa no sistema pelo id")
-    public ResponseEntity<RetornoCarteiraVacinacaoDTO> buscarCarteiraVacinacao(@PathVariable final Long id){
+    public ResponseEntity<RetornoCarteiraVacinacaoDTO> buscarCarteiraVacinacao(@PathVariable final Long id) {
         final var pessoa = registroVacinacaoService.consultarCarteiraVacinacao(id);
         return ResponseEntity.ok(pessoa);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir pessoa pelo id", description = "Exclui uma pessoa e todas as suas vacinações do sistema")
-    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarPessoa(@PathVariable final Long id) {
         pessoaService.deletarPessoaComVacinas(id);
         return ResponseEntity.noContent().build();
     }

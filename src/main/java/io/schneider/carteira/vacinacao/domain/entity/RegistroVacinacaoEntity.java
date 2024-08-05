@@ -2,7 +2,10 @@ package io.schneider.carteira.vacinacao.domain.entity;
 
 import io.schneider.carteira.vacinacao.shared.model.DoseEnum;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -12,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "registro_vacinacao")
+@Table(name = "registros_vacinacao")
 public class RegistroVacinacaoEntity {
 
     @Id

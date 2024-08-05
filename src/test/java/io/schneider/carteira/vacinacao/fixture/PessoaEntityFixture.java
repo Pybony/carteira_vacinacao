@@ -26,4 +26,5 @@ public interface PessoaEntityFixture {
     static Optional<PessoaEntity> pessoaEntityOptionalVazia() {
         return Optional.empty();
     }
+
 }

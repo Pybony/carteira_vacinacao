@@ -1,13 +1,7 @@
 package io.schneider.carteira.vacinacao.fixture;
 
-import io.schneider.carteira.vacinacao.controller.dto.ParametrosPessoaDTO;
 import io.schneider.carteira.vacinacao.controller.dto.ParametrosVacinaDTO;
-import io.schneider.carteira.vacinacao.controller.dto.RetornoPessoaDTO;
 import io.schneider.carteira.vacinacao.controller.dto.RetornoVacinaDTO;
-import io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum;
-import io.schneider.carteira.vacinacao.shared.model.SexoEnum;
-
-import java.time.LocalDate;
 
 import static io.schneider.carteira.vacinacao.shared.model.EsquemaVacinacaoEnum.DOSE_UNICA;
 
@@ -25,4 +19,5 @@ public interface VacinaDTOFixture {
                 .nome("Epatite")
                 .esquemaVacinacao(DOSE_UNICA);
     }
+
 }

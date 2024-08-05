@@ -4,7 +4,6 @@ import io.schneider.carteira.vacinacao.controller.dto.ParametrosVacinaDTO;
 import io.schneider.carteira.vacinacao.controller.dto.RetornoVacinaDTO;
 import io.schneider.carteira.vacinacao.domain.mapper.VacinaMapper;
 import io.schneider.carteira.vacinacao.domain.repository.VacinaRepository;
-import io.schneider.carteira.vacinacao.shared.model.erro.ErroCarteiraVacinacao;
 import io.schneider.carteira.vacinacao.shared.model.exception.AplicativoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

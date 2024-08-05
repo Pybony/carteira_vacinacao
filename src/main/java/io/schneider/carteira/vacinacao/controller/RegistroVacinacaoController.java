@@ -20,7 +20,6 @@ public class RegistroVacinacaoController {
 
     private final RegistroVacinacaoService service;
 
-
     @PostMapping
     @Operation(summary = "Cadastrar novo registro de vacinação", description = "Cadastra um novo registro de vacinação no sistema")
     public ResponseEntity<RetornoRegistroVacinacaoDTO> inserir(@Valid @RequestBody final ParametrosRegistroVacinacaoDTO parametrosRegistroVacinacao) {

@@ -5,5 +5,4 @@ import lombok.Builder;
 
 @Builder
 public record RetornoVacinaDTO(Long id, String nome, EsquemaVacinacaoEnum esquemaVacinacao) {
-
 }

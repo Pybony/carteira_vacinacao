@@ -11,4 +11,5 @@ public interface PessoaMapper {
     PessoaEntity paraEntity(final ParametrosPessoaDTO pessoaDTO);
 
     RetornoPessoaDTO paraDTO(final PessoaEntity pessoa);
+
 }
